@@ -32,11 +32,27 @@ Finally, a complete workout can be defined as follows
 
 ### Usage
 
+You can use the command line application
+```bash
+$ zwog --help
+usage: zwog [-h] -i INPUT_FILE [-o OUTPUT_FILE] [-v]
+
+Zwift workout generator
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -i INPUT_FILE, --input_file INPUT_FILE
+                        input filename
+  -o OUTPUT_FILE, --output_file OUTPUT_FILE
+                        output filename
+  -v, --version         show program's version number and exit
+```
+or call it from Python
 ```python
-from zwog import ZWOG
+import zwog
 
 workout_text = '15min from 10 to 50% FTP 5min from 50 to 70% FTP 2x 0.5hrs @ 100% FTP, 0.5hrs @ 50% FTP, 10min from 80 to 90% FTP 2min @ 50% FTP\n2min @ 50% FTP\n 10min @ 50% FTP, 10min @ 60% FTP 10min from 50 to 10% FTP'
-workout = ZWOG(workout_text)
+workout = zwog.ZWOG(workout_text)
 workout.save_zwo('workout.xml')
 print(workout)
 print('%d TSS'%(round(workout.tss)))
