@@ -39,5 +39,5 @@ workout_text = '15min from 10 to 50% FTP 5min from 50 to 70% FTP 2x 0.5hrs @ 100
 workout = ZWOG(workout_text)
 workout.save_zwo('workout.xml')
 print(workout)
-print('%d TSS'%(round(zwog.tss)))
+print('%d TSS'%(round(workout.tss)))
 ```
