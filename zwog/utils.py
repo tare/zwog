@@ -166,14 +166,25 @@ class ZWOG():
     tree = ElementTree()
     tree._setroot(root)
     return tree
+
+  def _duration_to_pretty_str(self,duration):
+    pretty_str = ''
+    if int(duration/3600) > 0:
+      pretty_str += '%dh'%(int(duration/3600))
+    if int((duration % 3600)/60) > 0:
+      pretty_str += '%dm'%(int((duration % 3600)/60))
+    if duration % 60 > 0:
+      pretty_str += '%ds'%(int((duration % 60)))
+
+    return pretty_str
   
   def _interval_to_str(self,interval):
     if isinstance(interval['power'],list):
-      return '%dsec from %.0f to %.0f%% FTP'%(interval['duration'],
+      return '%s from %.0f to %.0f%% FTP'%(self._duration_to_pretty_str(interval['duration']),
                                               interval['power'][0],
                                               interval['power'][1])
     else:
-      return '%dsec @ %.0f FTP'%(interval['duration'],
+      return '%s @ %.0f FTP'%(self._duration_to_pretty_str(interval['duration']),
                                  interval['power'])
   
   def _interval_to_tss(self,interval):
