@@ -33,7 +33,7 @@ Finally, a complete workout can be defined as follows
 ### Usage
 
 You can use the command line application
-```bash
+```console
 $ zwog --help
 usage: zwog [-h] -i INPUT_FILE [-o OUTPUT_FILE] [-v]
 
