@@ -17,6 +17,18 @@ if __name__ == '__main__':
   parser.add_argument('-o','--output_file',action='store',
                       dest='output_file',type=str,default=None,
                       required=False,help='output filename')
+  parser.add_argument('-a','--author',action='store',
+                      dest='author',type=str,default='Zwift workout generator (https://github.com/tare/zwog)',
+                      required=False,help='author name')
+  parser.add_argument('-n','--name',action='store',
+                      dest='name',type=str,default='Structured workout',
+                      required=False,help='workout name')
+  parser.add_argument('-c','--category',action='store',
+                      dest='category',type=str,default=None,
+                      required=False,help='category')
+  parser.add_argument('-s','--subcategory',action='store',
+                      dest='subcategory',type=str,default=None,
+                      required=False,help='subcategory')
   parser.add_argument('-v','--version',action='version',
                       version='%s %s'%(parser.prog,zwog.__version__))
 
@@ -30,7 +42,7 @@ if __name__ == '__main__':
   with open(options.input_file,'r') as f:
     workout_text = f.read()
 
-  workout = zwog.ZWOG(workout_text)
+  workout = zwog.ZWOG(workout_text,options.author,options.name,options.category,options.subcategory)
 
   if options.output_file is not None:
     workout.save_zwo(options.output_file)

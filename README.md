@@ -43,7 +43,8 @@ The parser is rather robust when it comes to newlines and other whitespaces.
 You can use the command line application
 ```console
 $ zwog --help
-usage: zwog [-h] -i INPUT_FILE [-o OUTPUT_FILE] [-v]
+usage: zwog [-h] -i INPUT_FILE [-o OUTPUT_FILE] [-a AUTHOR] [-n NAME]
+            [-c CATEGORY] [-s SUBCATEGORY] [-v]
 
 Zwift workout generator
 
@@ -53,6 +54,13 @@ optional arguments:
                         input filename
   -o OUTPUT_FILE, --output_file OUTPUT_FILE
                         output filename
+  -a AUTHOR, --author AUTHOR
+                        author name
+  -n NAME, --name NAME  workout name
+  -c CATEGORY, --category CATEGORY
+                        category
+  -s SUBCATEGORY, --subcategory SUBCATEGORY
+                        subcategory
   -v, --version         show program's version number and exit
 ```
 or call it from Python

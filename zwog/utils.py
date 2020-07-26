@@ -31,7 +31,7 @@ class TreeToJson(Transformer):
   workout = list
 
 class ZWOG():
-  def __init__(self,workout):
+  def __init__(self,workout,author='Zwift workout generator (https://github.com/tare/zwog)',name='Structured workout',category=None,subcategory=None):
 
     parser = Lark(r"""
       workout: block*
@@ -51,6 +51,11 @@ class ZWOG():
       %import common.INT
       %import common.NUMBER
     """,start='workout')
+
+    self.__name = name
+    self.__author = author
+    self.__category = category
+    self.__subcategory = subcategory
 
     self.__tree_workout = parser.parse(workout)
     self.__json_workout = TreeToJson().transform(parser.parse(workout))
@@ -119,13 +124,21 @@ class ZWOG():
   
     return element
   
-  def _json_to_zwo(self,x,name='Structured workout',author='ZWOG (https://github.com/tare/ZWOG)'):
+  def _json_to_zwo(self,x):
     root = Element('workout_file')
   
-    for child,value in [('author',author),('name',name),('description','%s\n\n%s'%('This workout was generated using ZWOG.',self._json_to_pretty(x))),('sportType','bike')]:
+    for child,value in [('author',self.__author),('name',self.__name),('description','%s\n\n%s'%('This workout was generated using ZWOG.',self._json_to_pretty(x))),('sportType','bike')]:
       tmp = SubElement(root,child)
       tmp.text = value
-  
+
+    if self.__category is not None:
+      tmp = SubElement(root,'category')
+      tmp.text = self.__category
+
+    if self.__subcategory is not None:
+      tmp = SubElement(root,'subcategory')
+      tmp.text = self.__subcategory
+
     tmp = SubElement(root, 'workout')
     for block_idx,block in enumerate(x):
       if (block_idx == 0 or block_idx == (len(x)-1)) and self._is_ramp(block): # warmup and ramp
