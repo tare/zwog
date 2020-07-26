@@ -29,4 +29,5 @@ setup(name='zwog',
           'Programming Language :: Python :: 3'],
       packages=['zwog'],
       install_requires=install_requires,
+      scripts=['bin/zwog']
 )
