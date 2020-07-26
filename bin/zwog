@@ -1,0 +1,40 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import argparse
+import logging
+
+import zwog
+
+if __name__ == '__main__':
+
+  parser = argparse.ArgumentParser(
+    description='Zwift workout generator')
+  parser.add_argument('-i','--input_file',action='store',
+                      dest='input_file',type=str,
+                      required=True,help='input filename')
+  parser.add_argument('-o','--output_file',action='store',
+                      dest='output_file',type=str,default=None,
+                      required=False,help='output filename')
+  parser.add_argument('-v','--version',action='version',
+                      version='%s %s'%(parser.prog,zwog.__version__))
+
+  options = parser.parse_args()
+
+  # check that the supplied input file exists
+  if not os.path.isfile(options.input_file):
+    logging.critical('Input file %s does not exist!'%(filename))
+    sys.exit(1)
+
+  with open(options.input_file,'r') as f:
+    workout_text = f.read()
+
+  workout = zwog.ZWOG(workout_text)
+
+  if options.output_file is not None:
+    workout.save_zwo(options.output_file)
+  else:
+    print(workout.zwo_workout)
+
+  sys.exit(0)
