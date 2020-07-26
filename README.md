@@ -4,6 +4,12 @@ Have you ever been frustrated by any WYSIWYG workout editor, such as the [Zwift 
 
 ZWOG makes it easier to generate structured workouts using a syntax similar to the one used on [What's on Zwift?](https://whatsonzwift.com).
 
+### Installation
+
+```console
+$ pip install git+https://github.com/tare/zwog.git
+```
+
 ### Syntax
 
 The basic building blocks are ramp intervals
@@ -29,6 +35,8 @@ Finally, a complete workout can be defined as follows
 3x 5min @ 95% FTP, 5min @ 86% FTP
 10min from 75 to 55% FTP
 ```
+
+The parser is rather robust when it comes to newlines and other whitespaces.
 
 ### Usage
 
@@ -57,3 +65,10 @@ workout.save_zwo('workout.xml')
 print(workout)
 print('%d TSS'%(round(workout.tss)))
 ```
+
+
+### Limitations
+
+* Only the [ZWO file format](https://github.com/h4l/zwift-workout-file-reference/blob/master/zwift_workout_file_tag_reference.md) is supported currently 
+* Workout files have to be uploaded [manually](https://zwiftinsider.com/load-custom-workouts/) to Zwift
+
