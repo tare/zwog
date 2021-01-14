@@ -11,12 +11,12 @@ if __name__ == '__main__':
 
   parser = argparse.ArgumentParser(
     description='Zwift workout generator')
-  parser.add_argument('-i','--input_file',action='store',
-                      dest='input_file',type=str,
-                      required=True,help='input filename')
-  parser.add_argument('-o','--output_file',action='store',
-                      dest='output_file',type=str,default=None,
-                      required=False,help='output filename')
+  parser.add_argument('-i','--input_file',nargs='?',action='store',
+                      dest='input_file',type=argparse.FileType('r'),
+                      default=sys.stdin,help='input filename')
+  parser.add_argument('-o','--output_file',nargs='?',action='store',
+                      dest='output_file',type=argparse.FileType('w'),
+                      default=sys.stdout,help='output filename')
   parser.add_argument('-a','--author',action='store',
                       dest='author',type=str,default='Zwift workout generator (https://github.com/tare/zwog)',
                       required=False,help='author name')
@@ -34,19 +34,12 @@ if __name__ == '__main__':
 
   options = parser.parse_args()
 
-  # check that the supplied input file exists
-  if not os.path.isfile(options.input_file):
-    logging.critical('Input file %s does not exist!'%(filename))
-    sys.exit(1)
-
-  with open(options.input_file,'r') as f:
-    workout_text = f.read()
+  with options.input_file:
+    workout_text = options.input_file.read()
 
   workout = zwog.ZWOG(workout_text,options.author,options.name,options.category,options.subcategory)
 
-  if options.output_file is not None:
-    workout.save_zwo(options.output_file)
-  else:
-    print(workout.zwo_workout)
+  with options.output_file:
+    options.output_file.write(workout.zwo_workout)
 
   sys.exit(0)
