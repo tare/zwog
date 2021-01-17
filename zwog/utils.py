@@ -41,7 +41,7 @@ class ZWOG():
       ramp: duration "from" ramp_power "%" "FTP"
       duration: NUMBER TIME_UNIT
       time_unit: TIME_UNIT
-      TIME_UNIT: ("sec"|"s"|"min"|"hrs"|"h")
+      TIME_UNIT: ("sec"|"s"|"min"|"m"|"hrs"|"h")
       repeats: INT
       steady_state_power: NUMBER -> power 
       ramp_power: NUMBER "to" NUMBER -> power
