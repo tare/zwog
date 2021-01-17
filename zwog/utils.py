@@ -10,7 +10,10 @@ class TreeToJson(Transformer):
       return int(d[0]*60)
     else:
       return int(d[0])
+  def durations(self,d):
+    return sum(d)
   def steady_state(self,s):
+
     return dict(duration=s[0],power=s[1])
   def ramp(self,s):
     return dict(duration=s[0],power=s[1])
@@ -37,8 +40,9 @@ class ZWOG():
       workout: block*
       block: [repeats "x"] intervals
       intervals: (ramp|steady_state ("," (steady_state|ramp))*)
-      steady_state: duration "@" steady_state_power "%" "FTP"
-      ramp: duration "from" ramp_power "%" "FTP"
+      steady_state: durations "@" steady_state_power "%" "FTP"
+      ramp: durations "from" ramp_power "%" "FTP"
+      durations: duration*
       duration: NUMBER TIME_UNIT
       time_unit: TIME_UNIT
       TIME_UNIT: ("sec"|"s"|"min"|"m"|"hrs"|"h")
