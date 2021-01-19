@@ -18,9 +18,9 @@ The basic building blocks are ramp intervals
 ```
 and steady state intervals
 ```
-2hrs @ 60% FTP
+2hrs 10min @ 60% FTP
 ```
-Interval durations can be given either in seconds (`sec`,`s`), minutes (`min`,`m`), or hours (`hrs`,`h`).
+Interval durations can be given in seconds (`sec`,`s`), minutes (`min`,`m`), and hours (`hrs`,`h`).
 
 Moreover, it is possible to create repeated intervals  
 ```
