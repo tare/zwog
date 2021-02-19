@@ -187,7 +187,7 @@ class ZWOG():
                                               interval['power'][0],
                                               interval['power'][1])
     else:
-      return '%s @ %.0f FTP'%(self._duration_to_pretty_str(interval['duration']),
+      return '%s @ %.0f%% FTP'%(self._duration_to_pretty_str(interval['duration']),
                                  interval['power'])
   
   def _interval_to_tss(self,interval):
