@@ -1,45 +1,47 @@
 #!/usr/bin/env python
-
-import os
+"""zwog"""
 import sys
 import argparse
-import logging
 
 import zwog
 
 if __name__ == '__main__':
 
-  parser = argparse.ArgumentParser(
-    description='Zwift workout generator')
-  parser.add_argument('-i','--input_file',nargs='?',action='store',
-                      dest='input_file',type=argparse.FileType('r'),
-                      default=sys.stdin,help='input filename')
-  parser.add_argument('-o','--output_file',nargs='?',action='store',
-                      dest='output_file',type=argparse.FileType('w'),
-                      default=sys.stdout,help='output filename')
-  parser.add_argument('-a','--author',action='store',
-                      dest='author',type=str,default='Zwift workout generator (https://github.com/tare/zwog)',
-                      required=False,help='author name')
-  parser.add_argument('-n','--name',action='store',
-                      dest='name',type=str,default='Structured workout',
-                      required=False,help='workout name')
-  parser.add_argument('-c','--category',action='store',
-                      dest='category',type=str,default=None,
-                      required=False,help='category')
-  parser.add_argument('-s','--subcategory',action='store',
-                      dest='subcategory',type=str,default=None,
-                      required=False,help='subcategory')
-  parser.add_argument('-v','--version',action='version',
-                      version='%s %s'%(parser.prog,zwog.__version__))
+    parser = argparse.ArgumentParser(
+        description='Zwift workout generator')
 
-  options = parser.parse_args()
+    parser.add_argument('-i','--input_file',nargs='?',action='store',
+                        dest='input_file',type=argparse.FileType('r'),
+                        default=sys.stdin,help='input filename')
+    parser.add_argument('-o','--output_file',nargs='?',action='store',
+                        dest='output_file',type=argparse.FileType('w'),
+                        default=sys.stdout,help='output filename')
+    parser.add_argument('-a','--author',action='store',
+                        dest='author',type=str,
+                        default=('Zwift workout generator '
+                                 '(https://github.com/tare/zwog)'),
+                        required=False,help='author name')
+    parser.add_argument('-n','--name',action='store',
+                        dest='name',type=str,default='Structured workout',
+                        required=False,help='workout name')
+    parser.add_argument('-c','--category',action='store',
+                        dest='category',type=str,default=None,
+                        required=False,help='category')
+    parser.add_argument('-s','--subcategory',action='store',
+                        dest='subcategory',type=str,default=None,
+                        required=False,help='subcategory')
+    parser.add_argument('-v','--version',action='version',
+                        version='%s %s'%(parser.prog,zwog.__version__))
 
-  with options.input_file:
-    workout_text = options.input_file.read()
+    options = parser.parse_args()
 
-  workout = zwog.ZWOG(workout_text,options.author,options.name,options.category,options.subcategory)
+    with options.input_file:
+        workout_text = options.input_file.read()
 
-  with options.output_file:
-    options.output_file.write(workout.zwo_workout)
+    workout = zwog.ZWOG(workout_text,options.author,options.name,
+                        options.category,options.subcategory)
 
-  sys.exit(0)
+    with options.output_file:
+        options.output_file.write(workout.zwo_workout)
+
+    sys.exit(0)
