@@ -27,7 +27,7 @@ class TreeToJson(Transformer):
     def intervals(self,i):
         return 'intervals',i
     def block(self,b):
-        return {y:x for y,x in b}
+        return dict(b)
     INT = int
     NUMBER = float
     TIME_UNIT = str
@@ -93,26 +93,17 @@ class ZWOG():
         return tostring(self.__zwo_workout.getroot(),encoding='unicode')
 
     def _is_ramp(self,x):
-        if (len(x['intervals']) == 1 and
-            isinstance(x['intervals'][0]['power'],list)):
-            return True
-        else:
-            return False
+        return bool(len(x['intervals']) == 1 and
+            isinstance(x['intervals'][0]['power'],list))
 
     def _is_steady_state(self,x):
-        if (len(x['intervals']) == 1 and not
-            isinstance(x['intervals'][0]['power'],list)):
-            return True
-        else:
-            return False
+        return bool(len(x['intervals']) == 1 and not
+            isinstance(x['intervals'][0]['power'],list))
 
     def _is_intervalst(self,x):
-        if (len(x['intervals']) == 2 and not
+        return bool(len(x['intervals']) == 2 and not
             isinstance(x['intervals'][0]['power'],list) and not
-            isinstance(x['intervals'][1]['power'],list)):
-            return True
-        else:
-            return False
+            isinstance(x['intervals'][1]['power'],list))
 
     def _interval_to_xml(self,interval,repeats=1):
         if not isinstance(interval,list):
@@ -182,9 +173,7 @@ class ZWOG():
                         for _ in range(repeats):
                             for interval in block['intervals']:
                                 tmp.append(self._interval_to_xml(interval))
-
-        tree = ElementTree()
-        tree._setroot(root)
+        tree = ElementTree(root)
         return tree
 
     def _duration_to_pretty_str(self,duration):
