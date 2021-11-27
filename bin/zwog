@@ -31,7 +31,7 @@ if __name__ == '__main__':
                         dest='subcategory',type=str,default=None,
                         required=False,help='subcategory')
     parser.add_argument('-v','--version',action='version',
-                        version='%s %s'%(parser.prog,zwog.__version__))
+                        version=f'{parser.prog} {zwog.__version__}')
 
     options = parser.parse_args()
 

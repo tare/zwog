@@ -1,3 +1,4 @@
+""""""
 from lark import Lark
 from lark import Transformer
 from xml.etree.ElementTree import (ElementTree, Element,
@@ -131,9 +132,9 @@ class ZWOG():
 
         for child,value in [('author',self.__author),
                             ('name',self.__name),
-                            ('description','%s\n\n%s'%(
-                                ('This workout was generated '
-                                 'using ZWOG.'),self._json_to_pretty(x))),
+                            ('description',
+                             ('This workout was generated using ZWOG.\n\n'
+                              f'{self._json_to_pretty(x)}')),
                             ('sportType','bike')]:
             tmp = SubElement(root,child)
             tmp.text = value
@@ -179,22 +180,21 @@ class ZWOG():
     def _duration_to_pretty_str(self,duration):
         pretty_str = ''
         if int(duration/3600) > 0:
-            pretty_str += '%dh'%(int(duration/3600))
+            pretty_str += f'{int(duration/3600)}h'
         if int((duration % 3600)/60) > 0:
-            pretty_str += '%dm'%(int((duration % 3600)/60))
+            pretty_str += f'{int((duration % 3600)/60)}m'
         if duration % 60 > 0:
-            pretty_str += '%ds'%(int((duration % 60)))
+            pretty_str += f'{int((duration % 60))}s'
         return pretty_str
 
     def _interval_to_str(self,interval):
         if isinstance(interval['power'],list):
-            return '%s from %.0f to %.0f%% FTP'%(
-                self._duration_to_pretty_str(interval['duration']),
-                interval['power'][0],interval['power'][1])
+            return (f'{self._duration_to_pretty_str(interval["duration"])}'
+                    f' from {interval["power"][0]:.0f} to '
+                    f'{interval["power"][1]:.0f}% FTP')
         else:
-            return '%s @ %.0f%% FTP'%(
-                self._duration_to_pretty_str(interval['duration']),
-                interval['power'])
+            return (f'{self._duration_to_pretty_str(interval["duration"])} '
+                    f'@ {interval["power"]:.0f}% FTP')
 
     def _interval_to_tss(self,interval):
         if isinstance(interval['power'],list):
@@ -215,7 +215,7 @@ class ZWOG():
                 output.append(self._interval_to_str(block['intervals'][0]))
             else:
                 if 'repeats' in block:
-                    tmp = '%dx '%(block['repeats'])
+                    tmp = f'{block["repeats"]}x '
                 else:
                     tmp = '1x '
                 output.append(tmp +', '.join([
