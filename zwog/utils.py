@@ -205,7 +205,9 @@ class ZWOG():
         return element
 
     def _json_to_zwo(self,blocks:list[dict]) -> ElementTree:
-        """Converts JSON to XML.
+        """Converts JSON to ZWO.
+
+        See: https://github.com/h4l/zwift-workout-file-reference/blob/master/zwift_workout_file_tag_reference.md
 
         Args:
             blocks (list[dict]): Blocks.
@@ -213,7 +215,7 @@ class ZWOG():
         Returns:
             ElementTree: XML tree.
 
-        """
+        """ # pylint: disable=line-too-long
         root = Element('workout_file')
 
         # fill metadata
