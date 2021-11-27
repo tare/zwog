@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+"""Zwift workout generator (zwog)."""
 import os
 
 from distutils.core import setup
