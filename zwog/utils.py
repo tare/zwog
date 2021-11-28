@@ -9,7 +9,7 @@ from lark import Transformer
 class WorkoutTransformer(Transformer):
     """Class to process workout parse-trees."""
     def duration(self,d:list) -> int:
-        """Returns duration in seconds"""
+        """Returns duration in seconds."""
         if d[1] == 'hrs' or d[1] == 'h':
             # return duration in seconds
             return int(d[0]*3600)
@@ -20,34 +20,34 @@ class WorkoutTransformer(Transformer):
             return int(d[0])
 
     def durations(self,d:list) -> int:
-        """Returns total duration"""
+        """Returns total duration."""
         return sum(d)
 
     def steady_state(self,s:list) -> dict:
-        """Returns steady-state"""
+        """Returns steady-state."""
         return dict(duration=s[0],power=s[1])
 
     def ramp(self,s:list) -> dict:
-        """Returns ramp"""
+        """Returns ramp."""
         return dict(duration=s[0],power=s[1])
 
     def power(self,p:list[float]) -> Union[float,list]:
-        """Returns power"""
+        """Returns power."""
         if len(p) == 1:
             return p[0]
         else:
             return p
 
     def repeats(self,r:list) -> Tuple[str,int]:
-        """Returns repeats"""
+        """Returns repeats."""
         return 'repeats',r[0]
 
     def intervals(self,i:list) -> Tuple[str,list]:
-        """Returns intervals"""
+        """Returns intervals."""
         return 'intervals',i
 
     def block(self,b:list) -> dict:
-        """Returns block"""
+        """Returns block."""
         return dict(b)
 
     INT = int
@@ -58,12 +58,12 @@ class WorkoutTransformer(Transformer):
 class ZWOG():
     """Zwift workout generator (ZWOG).
 
-        Args:
-            workout (str): Workout as a string.
-            author (str): Author.
-            name (str): Workout name.
-            category (Optional[str]): Workout category.
-            subcategory (Optional[str]): Workout subcategory.
+    Args:
+        workout (str): Workout as a string.
+        author (str): Author.
+        name (str): Workout name.
+        category (Optional[str]): Workout category.
+        subcategory (Optional[str]): Workout subcategory.
 
     """
     def __init__(self,workout:str,
@@ -175,7 +175,7 @@ class ZWOG():
 
     def _interval_to_xml(self,interval:Union[dict,list],
                          repeats:int=1) -> Element:
-        """
+        """Returns the interval as a XML node.
 
         Args:
             interval (Union[dict,list]):
@@ -317,7 +317,7 @@ class ZWOG():
         return tss
 
     def _json_to_pretty(self,blocks:list[dict]) -> str:
-        """Returns the workout as a string
+        """Returns the workout as a string.
 
         Args:
             blocks (list[dict]): Workout.
@@ -342,7 +342,7 @@ class ZWOG():
         return '\n'.join(output)
 
     def _json_to_tss(self,blocks:list[dict]) -> float:
-        """Calculates TSS for a workout
+        """Calculates TSS for a workout.
 
         Args:
             blocks list[dict]: Workout.
