@@ -1,3 +1,4 @@
+"""zwog."""
 from .utils import ZWOG
 
 __author__ = "Tarmo Äijö"

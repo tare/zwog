@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+"""Zwift workout generator (zwog)."""
 import os
 
 from distutils.core import setup
@@ -7,11 +7,13 @@ from distutils.core import setup
 import zwog
 
 # read the long description
-with open(os.path.join(os.path.abspath(os.path.dirname(__file__)),'README.md'),encoding='utf-8') as f:
+with open(os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                       'README.md'),encoding='utf-8') as f:
     long_description = f.read()
 
 # read the package requirements
-with open(os.path.join(os.path.abspath(os.path.dirname(__file__)),'requirements.txt'),encoding='utf-8') as f:
+with open(os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                       'requirements.txt'),encoding='utf-8') as f:
     install_requires = f.read().splitlines()
 
 setup(name='zwog',
@@ -25,7 +27,8 @@ setup(name='zwog',
       classifiers=[
           'Development Status :: 4 - Beta',
           'Intended Audience :: Other Audience',
-          'License :: OSI Approved :: BSD 3-Clause "New" or "Revised" License (BSD-3-Clause)',
+          ('License :: OSI Approved :: BSD 3-Clause "New" or "Revised" '
+           'License (BSD-3-Clause)'),
           'Programming Language :: Python :: 3'],
       packages=['zwog'],
       install_requires=install_requires,
