@@ -16,8 +16,9 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.8"
-      - name: Runk flake8
+      - name: Run flake8
         uses: py-actions/flake8@v2
         with:
           max-line-length: "79"
-          plugins: "flake8-bugbear flake8-black flake8-docstrings flake8-pylint flake8-isort"
+          # plugins: "flake8-bugbear flake8-black flake8-docstrings flake8-pylint flake8-isort"
+          plugins: "flake8-bugbear flake8-black"
