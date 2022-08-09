@@ -18,7 +18,6 @@ jobs:
           python-version: "3.8"
       - name: Run flake8
         uses: py-actions/flake8@v2
-        with:
-          max-line-length: "79"
+        with:          
           # plugins: "flake8-bugbear flake8-black flake8-docstrings flake8-pylint flake8-isort"
-          plugins: "flake8-bugbear flake8-black flake8-docstrings"
+          plugins: "flake8-bugbear flake8-black flake8-docstrings flake8-isort"

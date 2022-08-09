@@ -1,6 +1,9 @@
+[tool.flake8]
+    max-line-length = 79
+
 [tool.black]
-line-length = 79
-target-version = ['py36', 'py37', 'py38', 'py39', 'py310']
-color = true
-diff = true
-include = '\.pyi?$'
+    line-length = 79
+    target-version = ['py36', 'py37', 'py38', 'py39', 'py310']
+    color = true
+    diff = true
+    include = '\.pyi?$'
