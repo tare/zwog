@@ -10,12 +10,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
         uses: actions/checkout@v3
       - name: Set up Python environment
         uses: actions/setup-python@v4
         with:
           python-version: "3.8"
-      - name: Flake8 Lint
+      - name: Runk flake8
         uses: py-actions/flake8@v2
         with:
           max-line-length: "79"
