@@ -1,10 +1,8 @@
 """Routines for processing workouts."""
-from typing import Union, Tuple, Optional
-from xml.etree.ElementTree import (ElementTree, Element,
-                                   SubElement, tostring)
+from typing import Optional, Tuple, Union
+from xml.etree.ElementTree import Element, ElementTree, SubElement, tostring
 
-from lark import Lark
-from lark import Transformer
+from lark import Lark, Transformer
 
 zwog_grammar = r"""workout: block*
 block: [repeats "x"] intervals
@@ -31,17 +29,17 @@ class WorkoutTransformer(Transformer):
 
     def duration(self, d: list) -> int:
         """Return duration in seconds."""
-        if d[1] == 'hrs' or d[1] == 'h':
+        if d[1] == "hrs" or d[1] == "h":
             # return duration in seconds
-            return int(d[0]*3600)
-        elif d[1] == 'min' or d[1] == 'm':
+            return int(d[0] * 3600)
+        elif d[1] == "min" or d[1] == "m":
             # return duration in seconds
-            return int(d[0]*60)
-        elif d[1] == 'sec' or d[1] == 's':
+            return int(d[0] * 60)
+        elif d[1] == "sec" or d[1] == "s":
             return int(d[0])
         else:
             # this should not happen
-            raise ValueError(f'Unexpected unit of time: {d[1]}')
+            raise ValueError(f"Unexpected unit of time: {d[1]}")
 
     def durations(self, d: list) -> int:
         """Return total duration."""
@@ -64,11 +62,11 @@ class WorkoutTransformer(Transformer):
 
     def repeats(self, r: list) -> Tuple[str, int]:
         """Return repeats."""
-        return 'repeats', r[0]
+        return "repeats", r[0]
 
     def intervals(self, i: list) -> Tuple[str, list]:
         """Return intervals."""
-        return 'intervals', i
+        return "intervals", i
 
     def block(self, b: list) -> dict:
         """Return block."""
@@ -80,15 +78,19 @@ class WorkoutTransformer(Transformer):
     workout = list
 
 
-class ZWOG():
+class ZWOG:
     """Zwift workout generator (ZWOG)."""
 
-    def __init__(self, workout: str,
-                 author: str = ('Zwift workout generator '
-                                '(https://github.com/tare/zwog)'),
-                 name: str = 'Structured workout',
-                 category: Optional[str] = None,
-                 subcategory: Optional[str] = None):
+    def __init__(
+        self,
+        workout: str,
+        author: str = (
+            "Zwift workout generator " "(https://github.com/tare/zwog)"
+        ),
+        name: str = "Structured workout",
+        category: Optional[str] = None,
+        subcategory: Optional[str] = None,
+    ):
         """Initialize ZWOG.
 
         Args:
@@ -99,7 +101,7 @@ class ZWOG():
             subcategory: Workout subcategory.
 
         """
-        parser = Lark(zwog_grammar, start='workout')
+        parser = Lark(zwog_grammar, start="workout")
 
         self.__name = name
         self.__author = author
@@ -107,8 +109,9 @@ class ZWOG():
         self.__subcategory = subcategory
 
         # self.__tree_workout = parser.parse(workout)
-        self.__json_workout = (WorkoutTransformer()
-                               .transform(parser.parse(workout)))
+        self.__json_workout = WorkoutTransformer().transform(
+            parser.parse(workout)
+        )
         self.__pretty_workout = self._json_to_pretty(self.__json_workout)
         self.__zwo_workout = self._json_to_zwo(self.__json_workout)
         self.__tss = self._json_to_tss(self.__json_workout)
@@ -144,8 +147,9 @@ class ZWOG():
     @property
     def zwo_workout(self) -> str:
         """Get the workout as ZWO."""
-        return tostring(self.__zwo_workout.getroot(),
-                        encoding='unicode')+'\n'
+        return (
+            tostring(self.__zwo_workout.getroot(), encoding="unicode") + "\n"
+        )
 
     def _is_ramp(self, block: dict) -> bool:
         """Tell whether the block is a ramp block.
@@ -157,9 +161,10 @@ class ZWOG():
             True if a ramp, False otherwise.
 
         """
-        return bool(len(block['intervals']) == 1 and
-                    isinstance(block['intervals'][0]['power'],
-                               list))
+        return bool(
+            len(block["intervals"]) == 1
+            and isinstance(block["intervals"][0]["power"], list)
+        )
 
     def _is_steady_state(self, block: dict) -> bool:
         """Tell whether the block is a steady-state block.
@@ -171,9 +176,10 @@ class ZWOG():
             True if a steady-state, False otherwise.
 
         """
-        return bool(len(block['intervals']) == 1 and not
-                    isinstance(block['intervals'][0]['power'],
-                               list))
+        return bool(
+            len(block["intervals"]) == 1
+            and not isinstance(block["intervals"][0]["power"], list)
+        )
 
     def _is_intervalst(self, block: dict) -> bool:
         """Tell whether the block is an intervalst.
@@ -185,12 +191,13 @@ class ZWOG():
             True if an intervalst , False otherwise.
 
         """
-        return bool(len(block['intervals']) == 2 and not
-                    isinstance(block['intervals'][0]['power'], list) and not
-                    isinstance(block['intervals'][1]['power'], list))
+        return bool(
+            len(block["intervals"]) == 2
+            and not isinstance(block["intervals"][0]["power"], list)
+            and not isinstance(block["intervals"][1]["power"], list)
+        )
 
-    def _interval_to_xml(self, interval: dict,
-                         repeats: int = 1) -> Element:
+    def _interval_to_xml(self, interval: dict, repeats: int = 1) -> Element:
         """Return the interval as a XML node.
 
         Args:
@@ -202,22 +209,22 @@ class ZWOG():
 
         """
         if not isinstance(interval, list):
-            if not isinstance(interval['power'], list):  # steady-state
-                element = Element('SteadyState')
-                element.set('Duration', str(interval['duration']))
-                element.set('Power', str(interval['power']/100))
+            if not isinstance(interval["power"], list):  # steady-state
+                element = Element("SteadyState")
+                element.set("Duration", str(interval["duration"]))
+                element.set("Power", str(interval["power"] / 100))
             else:  # ramp
-                element = Element('Ramp')
-                element.set('Duration', str(interval['duration']))
-                element.set('PowerLow', str(interval['power'][0]/100))
-                element.set('PowerHigh', str(interval['power'][1]/100))
+                element = Element("Ramp")
+                element.set("Duration", str(interval["duration"]))
+                element.set("PowerLow", str(interval["power"][0] / 100))
+                element.set("PowerHigh", str(interval["power"][1] / 100))
         else:  # intervalst
-            element = Element('IntervalsT')
-            element.set('Repeat', str(repeats))
-            element.set('OnDuration', str(interval[0]['duration']))
-            element.set('OnPower', str(interval[0]['power']/100))
-            element.set('OffDuration', str(interval[1]['duration']))
-            element.set('OffPower', str(interval[1]['power']/100))
+            element = Element("IntervalsT")
+            element.set("Repeat", str(repeats))
+            element.set("OnDuration", str(interval[0]["duration"]))
+            element.set("OnPower", str(interval[0]["power"] / 100))
+            element.set("OffDuration", str(interval[1]["duration"]))
+            element.set("OffPower", str(interval[1]["power"] / 100))
         return element
 
     def _json_to_zwo(self, blocks: list[dict]) -> ElementTree:
@@ -232,46 +239,55 @@ class ZWOG():
             XML tree representing the workout.
 
         """  # pylint: disable=line-too-long  # noqa
-        root = Element('workout_file')
+        root = Element("workout_file")
 
         # fill metadata
-        for child, value in [('author', self.__author),
-                             ('name', self.__name),
-                             ('description',
-                              ('This workout was generated using ZWOG.\n\n'
-                               f'{self._json_to_pretty(blocks)}')),
-                             ('sportType', 'bike'),
-                             ('category', self.__category),
-                             ('subcategory', self.__subcategory)]:
+        for child, value in [
+            ("author", self.__author),
+            ("name", self.__name),
+            (
+                "description",
+                (
+                    "This workout was generated using ZWOG.\n\n"
+                    f"{self._json_to_pretty(blocks)}"
+                ),
+            ),
+            ("sportType", "bike"),
+            ("category", self.__category),
+            ("subcategory", self.__subcategory),
+        ]:
             if value is not None:
                 tmp = SubElement(root, child)
                 tmp.text = value
 
-        tmp = SubElement(root, 'workout')
+        tmp = SubElement(root, "workout")
         for block_idx, block in enumerate(blocks):
             # warmup and ramp
-            if block_idx in [0, (len(blocks)-1)] and self._is_ramp(block):
-                element = self._interval_to_xml(block['intervals'][0])
+            if block_idx in [0, (len(blocks) - 1)] and self._is_ramp(block):
+                element = self._interval_to_xml(block["intervals"][0])
                 if block_idx == 0:
-                    element.tag = 'Warmup'
+                    element.tag = "Warmup"
                 else:
-                    element.tag = 'Cooldown'
+                    element.tag = "Cooldown"
                 tmp.append(element)
             else:
                 # ramp or steady state
                 if self._is_ramp(block) or self._is_steady_state(block):
-                    tmp.append(self._interval_to_xml(block['intervals'][0]))
+                    tmp.append(self._interval_to_xml(block["intervals"][0]))
                 else:
-                    if 'repeats' in block:
-                        repeats = block['repeats']
+                    if "repeats" in block:
+                        repeats = block["repeats"]
                     else:
                         repeats = 1
                     if self._is_intervalst(block):  # intervalst
-                        tmp.append(self._interval_to_xml(block['intervals'],
-                                                         repeats=repeats))
+                        tmp.append(
+                            self._interval_to_xml(
+                                block["intervals"], repeats=repeats
+                            )
+                        )
                     else:  # non intervalst
                         for _ in range(repeats):
-                            for interval in block['intervals']:
+                            for interval in block["intervals"]:
                                 tmp.append(self._interval_to_xml(interval))
         tree = ElementTree(root)
         return tree
@@ -286,13 +302,13 @@ class ZWOG():
             Prettified and stringified duration.
 
         """
-        pretty_str = ''
-        if int(duration/3600) > 0:
-            pretty_str += f'{int(duration/3600)}h'
-        if int((duration % 3600)/60) > 0:
-            pretty_str += f'{int((duration % 3600)/60)}m'
+        pretty_str = ""
+        if int(duration / 3600) > 0:
+            pretty_str += f"{int(duration/3600)}h"
+        if int((duration % 3600) / 60) > 0:
+            pretty_str += f"{int((duration % 3600)/60)}m"
         if duration % 60 > 0:
-            pretty_str += f'{int((duration % 60))}s'
+            pretty_str += f"{int((duration % 60))}s"
         return pretty_str
 
     def _interval_to_str(self, interval: dict) -> str:
@@ -305,13 +321,17 @@ class ZWOG():
             String representation of the interval.
 
         """
-        if isinstance(interval['power'], list):
-            return (f'{self._duration_to_pretty_str(interval["duration"])}'
-                    f' from {interval["power"][0]:.0f} to '
-                    f'{interval["power"][1]:.0f}% FTP')
+        if isinstance(interval["power"], list):
+            return (
+                f'{self._duration_to_pretty_str(interval["duration"])}'
+                f' from {interval["power"][0]:.0f} to '
+                f'{interval["power"][1]:.0f}% FTP'
+            )
         else:
-            return (f'{self._duration_to_pretty_str(interval["duration"])} '
-                    f'@ {interval["power"]:.0f}% FTP')
+            return (
+                f'{self._duration_to_pretty_str(interval["duration"])} '
+                f'@ {interval["power"]:.0f}% FTP'
+            )
 
     def _interval_to_tss(self, interval: dict) -> float:
         """Calculate TSS for an interval.
@@ -323,13 +343,13 @@ class ZWOG():
             Calculated TSS.
 
         """
-        if isinstance(interval['power'], list):
-            min_power = min([interval['power'][0], interval['power'][1]])
-            max_power = max([interval['power'][0], interval['power'][1]])
-            tss = interval['duration']/3600*min_power
-            tss += interval['duration']/3600*(max_power-min_power)/2
+        if isinstance(interval["power"], list):
+            min_power = min([interval["power"][0], interval["power"][1]])
+            max_power = max([interval["power"][0], interval["power"][1]])
+            tss = interval["duration"] / 3600 * min_power
+            tss += interval["duration"] / 3600 * (max_power - min_power) / 2
         else:
-            tss = interval['duration']/3600*interval['power']
+            tss = interval["duration"] / 3600 * interval["power"]
         return tss
 
     def _json_to_pretty(self, blocks: list[dict]) -> str:
@@ -344,13 +364,19 @@ class ZWOG():
         """
         output = []
         for block in blocks:
-            tmp = ''
-            if 'repeats' in block:
+            tmp = ""
+            if "repeats" in block:
                 tmp = f'{block["repeats"]}x '
-            output.append(tmp + ', '.join([
-                self._interval_to_str(interval)
-                for interval in block['intervals']]))
-        return '\n'.join(output)
+            output.append(
+                tmp
+                + ", ".join(
+                    [
+                        self._interval_to_str(interval)
+                        for interval in block["intervals"]
+                    ]
+                )
+            )
+        return "\n".join(output)
 
     def _json_to_tss(self, blocks: list[dict]) -> float:
         """Calculate TSS for a workout.
@@ -366,12 +392,16 @@ class ZWOG():
         for block in blocks:
             # ramp or steady state
             if self._is_ramp(block) or self._is_steady_state(block):
-                tss += self._interval_to_tss(block['intervals'][0])
+                tss += self._interval_to_tss(block["intervals"][0])
             else:
-                if 'repeats' in block:
-                    repeats = block['repeats']
+                if "repeats" in block:
+                    repeats = block["repeats"]
                 else:
                     repeats = 1
-                tss += sum([repeats*self._interval_to_tss(interval)
-                            for interval in block['intervals']])
+                tss += sum(
+                    [
+                        repeats * self._interval_to_tss(interval)
+                        for interval in block["intervals"]
+                    ]
+                )
         return tss
