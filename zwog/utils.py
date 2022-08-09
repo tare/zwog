@@ -6,6 +6,25 @@ from xml.etree.ElementTree import (ElementTree, Element,
 from lark import Lark
 from lark import Transformer
 
+zwog_grammar = r"""workout: block*
+block: [repeats "x"] intervals
+intervals: (ramp|steady_state)~1 ("," (steady_state|ramp))*
+steady_state: durations "@" steady_state_power "%" "FTP"
+ramp: durations "from" ramp_power "%" "FTP"
+durations: duration+
+duration: NUMBER TIME_UNIT
+time_unit: TIME_UNIT
+TIME_UNIT: ("sec"|"s"|"min"|"m"|"hrs"|"h")
+repeats: INT
+steady_state_power: NUMBER -> power
+ramp_power: NUMBER "to" NUMBER -> power
+
+%ignore WS
+%import common.WS
+%import common.INT
+%import common.NUMBER
+"""
+
 
 class WorkoutTransformer(Transformer):
     """Class to process workout parse-trees."""
@@ -80,25 +99,7 @@ class ZWOG():
             subcategory: Workout subcategory.
 
         """
-        parser = Lark(r"""
-            workout: block*
-            block: [repeats "x"] intervals
-            intervals: (ramp|steady_state)~1 ("," (steady_state|ramp))*
-            steady_state: durations "@" steady_state_power "%" "FTP"
-            ramp: durations "from" ramp_power "%" "FTP"
-            durations: duration+
-            duration: NUMBER TIME_UNIT
-            time_unit: TIME_UNIT
-            TIME_UNIT: ("sec"|"s"|"min"|"m"|"hrs"|"h")
-            repeats: INT
-            steady_state_power: NUMBER -> power
-            ramp_power: NUMBER "to" NUMBER -> power
-
-            %ignore WS
-            %import common.WS
-            %import common.INT
-            %import common.NUMBER
-        """, start='workout')
+        parser = Lark(zwog_grammar, start='workout')
 
         self.__name = name
         self.__author = author
