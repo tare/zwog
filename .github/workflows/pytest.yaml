@@ -1,4 +1,4 @@
-name: zwog
+name: pytest
 
 on:
   push:
