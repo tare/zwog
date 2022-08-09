@@ -1,5 +1,5 @@
 """Routines for processing workouts."""
-from typing import Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union
 from xml.etree.ElementTree import Element, ElementTree, SubElement, tostring
 
 from lark import Lark, Transformer
@@ -53,7 +53,7 @@ class WorkoutTransformer(Transformer):
         """Return ramp."""
         return dict(duration=s[0], power=s[1])
 
-    def power(self, p: list[float]) -> Union[float, list]:
+    def power(self, p: List[float]) -> Union[float, list]:
         """Return power."""
         if len(p) == 1:
             return p[0]
@@ -135,7 +135,7 @@ class ZWOG:
         return self.__tss
 
     @property
-    def json_workout(self) -> list[dict]:
+    def json_workout(self) -> List[dict]:
         """Return workout as JSON."""
         return self.__json_workout
 
@@ -227,7 +227,7 @@ class ZWOG:
             element.set("OffPower", str(interval[1]["power"] / 100))
         return element
 
-    def _json_to_zwo(self, blocks: list[dict]) -> ElementTree:
+    def _json_to_zwo(self, blocks: List[dict]) -> ElementTree:
         """Convert JSON to ZWO.
 
         See: https://github.com/h4l/zwift-workout-file-reference/blob/master/zwift_workout_file_tag_reference.md
@@ -352,11 +352,11 @@ class ZWOG:
             tss = interval["duration"] / 3600 * interval["power"]
         return tss
 
-    def _json_to_pretty(self, blocks: list[dict]) -> str:
+    def _json_to_pretty(self, blocks: List[dict]) -> str:
         """Return the workout as a string.
 
         Args:
-            blocks (list[dict]): Workout.
+            blocks: Workout.
 
         Returns:
             str: String representation of the workout.
@@ -378,14 +378,14 @@ class ZWOG:
             )
         return "\n".join(output)
 
-    def _json_to_tss(self, blocks: list[dict]) -> float:
+    def _json_to_tss(self, blocks: List[dict]) -> float:
         """Calculate TSS for a workout.
 
         Args:
             blocks: Workout.
 
         Returns:
-            float: Calculated TSS.
+            Calculated TSS.
 
         """
         tss = 0
