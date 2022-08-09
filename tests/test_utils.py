@@ -3,6 +3,7 @@ import xml.etree.ElementTree as ET
 
 import pytest
 from lark.exceptions import UnexpectedCharacters, UnexpectedEOF
+
 from zwog.utils import ZWOG, WorkoutTransformer
 
 

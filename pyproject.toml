@@ -7,3 +7,6 @@
     color = true
     diff = true
     include = '\.pyi?$'
+
+[tool.isort]
+    line_length = 79
