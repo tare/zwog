@@ -108,7 +108,6 @@ class ZWOG:
         self.__category = category
         self.__subcategory = subcategory
 
-        # self.__tree_workout = parser.parse(workout)
         self.__json_workout = WorkoutTransformer().transform(
             parser.parse(workout)
         )
@@ -139,17 +138,15 @@ class ZWOG:
         """Return workout as JSON."""
         return self.__json_workout
 
-    # @property
-    # def _tree_workout(self) -> str:
-    #     """"""
-    #     return self.__tree_workout.pretty()
-
     @property
     def zwo_workout(self) -> str:
         """Get the workout as ZWO."""
-        return (
-            tostring(self.__zwo_workout.getroot(), encoding="unicode") + "\n"
-        )
+        return tostring(self.elementtree_workout, encoding="unicode") + "\n"
+
+    @property
+    def element_workout(self) -> str:
+        """Get the workout as element."""
+        return self.__zwo_workout.getroot()
 
     def _is_ramp(self, block: dict) -> bool:
         """Tell whether the block is a ramp block.

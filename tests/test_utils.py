@@ -1,7 +1,35 @@
 """unit tests for zwog.utils."""
+import xml.etree.ElementTree as ET
+
 import pytest
 from lark.exceptions import UnexpectedCharacters, UnexpectedEOF
 from zwog.utils import ZWOG, WorkoutTransformer
+
+
+def elements_equal(e1, e2):
+    """Test two elements.
+
+    Taken from: https://stackoverflow.com/a/24349916
+
+    Args:
+        e1: First element.
+        e2: Second element
+
+    Returns:
+        True if equal otherwise False.
+
+    """
+    if e1.tag != e2.tag:
+        return False
+    if e1.text != e2.text:
+        return False
+    if e1.tail != e2.tail:
+        return False
+    if e1.attrib != e2.attrib:
+        return False
+    if len(e1) != len(e2):
+        return False
+    return all(elements_equal(c1, c2) for c1, c2 in zip(e1, e2))
 
 
 def test_zwog_grammar():
@@ -170,61 +198,74 @@ def test_json_workout():
 
 def test_zwo_workout():
     """Test zwo_workout (ZWOG)."""
-    assert (
-        ZWOG(r"10m @ 50% FTP", "John Dow", "Cat1", "SubCat1").zwo_workout
-    ) == (
-        "<workout_file><author>John Dow</author><name>Cat1</name>"
-        "<description>This workout was generated using ZWOG.\n\n"
-        "10m @ 50% FTP</description><sportType>bike</sportType>"
-        "<category>SubCat1</category><workout>"
-        '<SteadyState Duration="600" Power="0.5" />'
-        "</workout></workout_file>\n"
+    assert elements_equal(
+        ZWOG(r"10m @ 50% FTP", "John Dow", "Cat1", "SubCat1").element_workout,
+        ET.ElementTree(
+            ET.fromstring(
+                "<workout_file><author>John Dow</author><name>Cat1</name>"
+                "<description>This workout was generated using ZWOG.\n\n"
+                "10m @ 50% FTP</description><sportType>bike</sportType>"
+                "<category>SubCat1</category><workout>"
+                '<SteadyState Duration="600" Power="0.5" />'
+                "</workout></workout_file>\n"
+            )
+        ).getroot(),
     )
 
-    assert ZWOG(
-        (
-            r"60s from 40 to 80% FTP 10m @ 80% FTP "
-            r"10min from 80 to 70% FTP 1h from 70 to 50% FTP"
-        ),
-        "John Dow",
-        "Cat1",
-        "SubCat1",
-    ).zwo_workout == (
-        "<workout_file><author>John Dow</author><name>Cat1"
-        "</name><description>This workout was generated using "
-        "ZWOG.\n\n1m from 40 to 80% FTP\n10m @ 80% FTP\n10m "
-        "from 80 to 70% FTP\n1h from 70 to 50% FTP"
-        "</description><sportType>bike</sportType>"
-        "<category>SubCat1</category><workout><Warmup "
-        'Duration="60" PowerLow="0.4" PowerHigh="0.8" '
-        '/><SteadyState Duration="600" Power="0.8" '
-        '/><Ramp Duration="600" PowerLow="0.8" '
-        'PowerHigh="0.7" /><Cooldown Duration="3600" '
-        'PowerLow="0.7" PowerHigh="0.5" /></workout>'
-        "</workout_file>\n"
+    assert elements_equal(
+        ZWOG(
+            (
+                r"60s from 40 to 80% FTP 10m @ 80% FTP "
+                r"10min from 80 to 70% FTP 1h from 70 to 50% FTP"
+            ),
+            "John Dow",
+            "Cat1",
+            "SubCat1",
+        ).element_workout,
+        ET.ElementTree(
+            ET.fromstring(
+                "<workout_file><author>John Dow</author><name>Cat1"
+                "</name><description>This workout was generated using "
+                "ZWOG.\n\n1m from 40 to 80% FTP\n10m @ 80% FTP\n10m "
+                "from 80 to 70% FTP\n1h from 70 to 50% FTP"
+                "</description><sportType>bike</sportType>"
+                "<category>SubCat1</category><workout><Warmup "
+                'Duration="60" PowerLow="0.4" PowerHigh="0.8" '
+                '/><SteadyState Duration="600" Power="0.8" '
+                '/><Ramp Duration="600" PowerLow="0.8" '
+                'PowerHigh="0.7" /><Cooldown Duration="3600" '
+                'PowerLow="0.7" PowerHigh="0.5" /></workout>'
+                "</workout_file>\n"
+            )
+        ).getroot(),
     )
 
-    assert ZWOG(
-        (
-            r"1m @ 50% FTP 3x 5 min from 70 to 100% FTP, "
-            r"5 min from 100 to 70% FTP 1m @ 50% FTP"
-        ),
-        "John Dow",
-        "Cat1",
-        "SubCat1",
-    ).zwo_workout == (
-        "<workout_file><author>John Dow</author><name>Cat1</name>"
-        "<description>This workout was generated using ZWOG.\n\n"
-        "1m @ 50% FTP\n3x 5m from 70 to 100% FTP, 5m from 100 "
-        "to 70% FTP\n1m @ 50% FTP</description><sportType>bike"
-        "</sportType><category>SubCat1</category><workout>"
-        '<SteadyState Duration="60" Power="0.5" /><Ramp '
-        'Duration="300" PowerLow="0.7" PowerHigh="1.0" />'
-        '<Ramp Duration="300" PowerLow="1.0" PowerHigh="0.7" '
-        '/><Ramp Duration="300" PowerLow="0.7" PowerHigh="1.0" '
-        '/><Ramp Duration="300" PowerLow="1.0" PowerHigh="0.7" '
-        '/><Ramp Duration="300" PowerLow="0.7" PowerHigh="1.0" '
-        '/><Ramp Duration="300" PowerLow="1.0" PowerHigh="0.7" '
-        '/><SteadyState Duration="60" Power="0.5" /></workout>'
-        "</workout_file>\n"
+    assert elements_equal(
+        ZWOG(
+            (
+                r"1m @ 50% FTP 3x 5 min from 70 to 100% FTP, "
+                r"5 min from 100 to 70% FTP 1m @ 50% FTP"
+            ),
+            "John Dow",
+            "Cat1",
+            "SubCat1",
+        ).element_workout,
+        ET.ElementTree(
+            ET.fromstring(
+                "<workout_file><author>John Dow</author><name>Cat1</name>"
+                "<description>This workout was generated using ZWOG.\n\n"
+                "1m @ 50% FTP\n3x 5m from 70 to 100% FTP, 5m from 100 "
+                "to 70% FTP\n1m @ 50% FTP</description><sportType>bike"
+                "</sportType><category>SubCat1</category><workout>"
+                '<SteadyState Duration="60" Power="0.5" /><Ramp '
+                'Duration="300" PowerLow="0.7" PowerHigh="1.0" />'
+                '<Ramp Duration="300" PowerLow="1.0" PowerHigh="0.7" '
+                '/><Ramp Duration="300" PowerLow="0.7" PowerHigh="1.0" '
+                '/><Ramp Duration="300" PowerLow="1.0" PowerHigh="0.7" '
+                '/><Ramp Duration="300" PowerLow="0.7" PowerHigh="1.0" '
+                '/><Ramp Duration="300" PowerLow="1.0" PowerHigh="0.7" '
+                '/><SteadyState Duration="60" Power="0.5" /></workout>'
+                "</workout_file>\n"
+            )
+        ).getroot(),
     )
