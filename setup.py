@@ -11,11 +11,6 @@ with open(os.path.join(os.path.abspath(os.path.dirname(__file__)),
                        'README.md'),encoding='utf-8') as f:
     long_description = f.read()
 
-# read the package requirements
-with open(os.path.join(os.path.abspath(os.path.dirname(__file__)),
-                       'requirements.txt'),encoding='utf-8') as f:
-    install_requires = f.read().splitlines()
-
 setup(name='zwog',
       version=zwog.__version__,
       description='Zwift workout generator',
@@ -31,6 +26,6 @@ setup(name='zwog',
            'License (BSD-3-Clause)'),
           'Programming Language :: Python :: 3'],
       packages=['zwog'],
-      install_requires=install_requires,
+      install_requires=["lark-parser"]
       scripts=['bin/zwog']
 )
