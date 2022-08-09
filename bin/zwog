@@ -73,7 +73,7 @@ if __name__ == "__main__":
         "-v",
         "--version",
         action="version",
-        version=f"{parser.prog} {zwog.__version__}",
+        version=f"{parser.prog} {'0.0.2'}",
     )
 
     options = parser.parse_args()
