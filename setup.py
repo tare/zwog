@@ -3,8 +3,6 @@
 import os
 from distutils.core import setup
 
-import zwog
-
 # read the long description
 with open(
     os.path.join(os.path.abspath(os.path.dirname(__file__)), "README.md"),
@@ -14,13 +12,13 @@ with open(
 
 setup(
     name="zwog",
-    version=zwog.__version__,
+    version="0.0.2",
     description="Zwift workout generator",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    author=zwog.__author__,
+    author="Tarmo Äijö",
     url="https://github.com/tare/zwog",
-    license=zwog.__license__,
+    license='BSD 3-Clause "New" or "Revised" License',
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Other Audience",
