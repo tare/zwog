@@ -20,4 +20,4 @@ jobs:
         uses: py-actions/flake8@v2
         with:          
           # plugins: "flake8-bugbear flake8-black flake8-docstrings flake8-pylint flake8-isort"
-          plugins: "flake8-bugbear flake8-black flake8-docstrings flake8-isort"
+          plugins: "flake8-bugbear flake8-black flake8-docstrings flake8-isort flake8-pylint"
