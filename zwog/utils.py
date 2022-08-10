@@ -396,7 +396,7 @@ class ZWOG:
                 else:
                     repeats = 1
                 tss += sum(
-                        repeats * self._interval_to_tss(interval)
-                        for interval in block["intervals"]
+                    repeats * self._interval_to_tss(interval)
+                    for interval in block["intervals"]
                 )
         return tss
