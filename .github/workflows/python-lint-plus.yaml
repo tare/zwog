@@ -26,7 +26,7 @@ jobs:
       - name: Run python-lint-plus
         uses: weibullguy/python-lint-plus@v1.9.0
         with:
-              python-root-list: "."
+              python-root-list: "zwog tests"
               use-black: true
               use-yapf: false
               use-isort: true
