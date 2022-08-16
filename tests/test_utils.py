@@ -1,5 +1,6 @@
 """unit tests for zwog.utils."""
 import xml.etree.ElementTree as ET
+from tempfile import NamedTemporaryFile
 
 import pytest
 from lark.exceptions import UnexpectedCharacters, UnexpectedEOF
@@ -197,8 +198,8 @@ def test_json_workout():
     ]
 
 
-def test_zwo_workout():
-    """Test zwo_workout (ZWOG)."""
+def test_element_workout():
+    """Test element_workout (ZWOG)."""
     assert elements_equal(
         ZWOG(r"10m @ 50% FTP", "John Dow", "Cat1", "SubCat1").element_workout,
         ET.ElementTree(
@@ -269,4 +270,27 @@ def test_zwo_workout():
                 "</workout_file>\n"
             )
         ).getroot(),
+    )
+
+
+def test_save_zwo():
+    """Test save_zwo (ZWOG)."""
+    workout = ZWOG(r"4x 50s from 10 to 100% FTP 2h @ 90% FTP")
+    with NamedTemporaryFile(suffix=".xml") as tmp_file:
+        workout.save_zwo(tmp_file.name)
+        read_workout = ET.parse(tmp_file.name)
+    assert elements_equal(read_workout.getroot(), workout.element_workout)
+
+
+def test_zwo_workout():
+    """Test zwo_workout (ZWOG)."""
+    assert ZWOG(
+        r"10m @ 50% FTP", "John Dow", "Cat1", "SubCat1"
+    ).zwo_workout == (
+        "<workout_file><author>John Dow</author><name>Cat1</name>"
+        "<description>This workout was generated using ZWOG.\n\n"
+        "10m @ 50% FTP</description><sportType>bike</sportType>"
+        "<category>SubCat1</category><workout>"
+        '<SteadyState Duration="600" Power="0.5" />'
+        "</workout></workout_file>\n"
     )

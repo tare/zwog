@@ -141,7 +141,7 @@ class ZWOG:
     @property
     def zwo_workout(self) -> str:
         """Get the workout as ZWO."""
-        return tostring(self.elementtree_workout, encoding="unicode") + "\n"
+        return tostring(self.element_workout, encoding="unicode") + "\n"
 
     @property
     def element_workout(self) -> str:
