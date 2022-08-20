@@ -2,14 +2,14 @@ name: python-lint-plus
 
 on:
   push:
-    branches: 
+    branches:
       - "**"
   pull_request:
-    branches: 
+    branches:
       - "**"
 
 jobs:
-  flake8-lint:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
