@@ -70,7 +70,7 @@ class WorkoutTransformer(Transformer):
 
     def block(self, b: list) -> dict:
         """Return block."""
-        return dict(b)
+        return dict(filter(lambda x: x is not None, b))
 
     INT = int
     NUMBER = float
@@ -270,7 +270,14 @@ class ZWOG:
             else:
                 # ramp or steady state
                 if self._is_ramp(block) or self._is_steady_state(block):
-                    tmp.append(self._interval_to_xml(block["intervals"][0]))
+                    if "repeats" in block:
+                        repeats = block["repeats"]
+                    else:
+                        repeats = 1
+                    for _ in range(repeats):
+                        tmp.append(
+                            self._interval_to_xml(block["intervals"][0])
+                        )
                 else:
                     if "repeats" in block:
                         repeats = block["repeats"]

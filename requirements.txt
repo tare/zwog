@@ -1,1 +1,1 @@
-lark-parser
+lark~=1.1.2

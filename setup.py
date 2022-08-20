@@ -13,23 +13,19 @@ with open(
 
 setup(
     name="zwog",
-    version="0.0.2",
+    version="0.1.2",
     description="Zwift workout generator",
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="Tarmo Äijö",
     url="https://github.com/tare/zwog",
-    license='BSD 3-Clause "New" or "Revised" License',
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Other Audience",
-        (
-            'License :: OSI Approved :: BSD 3-Clause "New" or "Revised" '
-            "License (BSD-3-Clause)"
-        ),
+        "License :: OSI Approved :: BSD License",
         "Programming Language :: Python :: 3",
     ],
     packages=["zwog"],
-    install_requires=["lark-parser"],
+    install_requires=["lark~=1.1.2"],
     scripts=["bin/zwog"],
 )
