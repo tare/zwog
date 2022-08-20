@@ -6,6 +6,12 @@ ZWOG makes it easier to generate structured workouts using a syntax similar to t
 
 ### Installation
 
+Install the latest stable version from PyPi
+```console
+pip install zwog
+```
+
+Install the version from the main branch
 ```console
 $ pip install git+https://github.com/tare/zwog.git
 ```
@@ -22,7 +28,7 @@ and steady state intervals
 ```
 Interval durations can be given in seconds (`sec`,`s`), minutes (`min`,`m`), and hours (`hrs`,`h`).
 
-Moreover, it is possible to create repeated intervals  
+Moreover, it is possible to create repeated intervals
 ```
 4x 5min @ 95% FTP, 5min @ 85% FTP
 ```
@@ -77,6 +83,5 @@ print('%d TSS'%(round(workout.tss)))
 
 ### Limitations
 
-* Only the [ZWO file format](https://github.com/h4l/zwift-workout-file-reference/blob/master/zwift_workout_file_tag_reference.md) is supported currently 
+* Only the [ZWO file format](https://github.com/h4l/zwift-workout-file-reference/blob/master/zwift_workout_file_tag_reference.md) is supported currently
 * Workout files have to be uploaded [manually](https://zwiftinsider.com/load-custom-workouts/) to Zwift
-
