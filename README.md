@@ -8,7 +8,7 @@ ZWOG makes it easier to generate structured workouts using a syntax similar to t
 
 Install the latest stable version from PyPi
 ```console
-pip install zwog
+$ pip install zwog
 ```
 
 Install the version from the main branch
