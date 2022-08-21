@@ -6,11 +6,13 @@ ZWOG makes it easier to generate structured workouts using a syntax similar to t
 
 ### Installation
 
-Install the latest stable version from PyPi
+#### PyPI
+Install the latest stable version from PyPI
 ```console
 $ pip install zwog
 ```
 
+#### GitHub
 Install the version from the main branch
 ```console
 $ pip install git+https://github.com/tare/zwog.git

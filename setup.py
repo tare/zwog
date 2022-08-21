@@ -13,7 +13,7 @@ with open(
 
 setup(
     name="zwog",
-    version="0.1.2",
+    version="0.0.2",
     description="Zwift workout generator",
     long_description=long_description,
     long_description_content_type="text/markdown",
