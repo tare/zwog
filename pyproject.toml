@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.flake8]
+    max-line-length = 79
+
+[tool.pylint]
+
+[tool.black]
+    line-length = 79
+    target-version = ['py36', 'py37', 'py38', 'py39', 'py310']
+    include = '\.pyi?$'
+
+[tool.isort]
+    line_length = 79
