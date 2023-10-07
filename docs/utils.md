@@ -3,23 +3,26 @@
 <a href="../zwog/utils.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `utils`
-Routines for processing workouts. 
+Routines for processing workouts.
 
+**Global Variables**
+---------------
+- **zwog_grammar**
 
 
 ---
 
-<a href="../zwog/utils.py#L10"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../zwog/utils.py#L27"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `WorkoutTransformer`
-Class to process workout parse-trees. 
+Class to process workout parse-trees.
 
 
 
 
 ---
 
-<a href="../zwog/utils.py#L54"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../zwog/utils.py#L71"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `block`
 
@@ -27,11 +30,11 @@ Class to process workout parse-trees.
 block(b: list) → dict
 ```
 
-Return block. 
+Return block.
 
 ---
 
-<a href="../zwog/utils.py#L13"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../zwog/utils.py#L30"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `duration`
 
@@ -39,11 +42,11 @@ Return block.
 duration(d: list) → int
 ```
 
-Return duration in seconds. 
+Return duration in seconds.
 
 ---
 
-<a href="../zwog/utils.py#L27"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../zwog/utils.py#L44"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `durations`
 
@@ -51,11 +54,11 @@ Return duration in seconds.
 durations(d: list) → int
 ```
 
-Return total duration. 
+Return total duration.
 
 ---
 
-<a href="../zwog/utils.py#L50"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../zwog/utils.py#L67"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `intervals`
 
@@ -63,23 +66,23 @@ Return total duration.
 intervals(i: list) → Tuple[str, list]
 ```
 
-Return intervals. 
+Return intervals.
 
 ---
 
-<a href="../zwog/utils.py#L39"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../zwog/utils.py#L56"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `power`
 
 ```python
-power(p: list) → Union[float, list]
+power(p: List[float]) → Union[float, list]
 ```
 
-Return power. 
+Return power.
 
 ---
 
-<a href="../zwog/utils.py#L35"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../zwog/utils.py#L52"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `ramp`
 
@@ -87,11 +90,11 @@ Return power.
 ramp(s: list) → dict
 ```
 
-Return ramp. 
+Return ramp.
 
 ---
 
-<a href="../zwog/utils.py#L46"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../zwog/utils.py#L63"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `repeats`
 
@@ -99,11 +102,11 @@ Return ramp.
 repeats(r: list) → Tuple[str, int]
 ```
 
-Return repeats. 
+Return repeats.
 
 ---
 
-<a href="../zwog/utils.py#L31"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../zwog/utils.py#L48"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `steady_state`
 
@@ -111,17 +114,17 @@ Return repeats.
 steady_state(s: list) → dict
 ```
 
-Return steady-state. 
+Return steady-state.
 
 
 ---
 
-<a href="../zwog/utils.py#L64"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../zwog/utils.py#L81"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `ZWOG`
-Zwift workout generator (ZWOG). 
+Zwift workout generator (ZWOG).
 
-<a href="../zwog/utils.py#L67"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../zwog/utils.py#L84"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -135,42 +138,48 @@ __init__(
 )
 ```
 
-Initialize ZWOG. 
+Initialize ZWOG.
 
 
 
 **Args:**
- 
- - <b>`workout`</b>:  Workout as a string. 
- - <b>`author`</b>:  Author. 
- - <b>`name`</b>:  Workout name. 
- - <b>`category`</b>:  Workout category. 
- - <b>`subcategory`</b>:  Workout subcategory. 
 
+ - <b>`workout`</b>:  Workout as a string.
+ - <b>`author`</b>:  Author.
+ - <b>`name`</b>:  Workout name.
+ - <b>`category`</b>:  Workout category.
+ - <b>`subcategory`</b>:  Workout subcategory.
+
+
+---
+
+#### <kbd>property</kbd> element_workout
+
+Get the workout as element.
 
 ---
 
 #### <kbd>property</kbd> json_workout
 
-Return workout as JSON. 
+Return workout as JSON.
 
 ---
 
 #### <kbd>property</kbd> tss
 
-Get TSS. 
+Get TSS.
 
 ---
 
 #### <kbd>property</kbd> zwo_workout
 
-Get the workout as ZWO. 
+Get the workout as ZWO.
 
 
 
 ---
 
-<a href="../zwog/utils.py#L115"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../zwog/utils.py#L118"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `save_zwo`
 
@@ -178,13 +187,13 @@ Get the workout as ZWO.
 save_zwo(filename) → None
 ```
 
-Save the workout in the ZWO format. 
+Save the workout in the ZWO format.
 
 
 
 **Args:**
- 
- - <b>`filename`</b>:  Filename. 
+
+ - <b>`filename`</b>:  Filename.
 
 
 
