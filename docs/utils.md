@@ -1,18 +1,79 @@
 <!-- markdownlint-disable -->
 
-<a href="../zwog/utils.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../src/zwog/utils.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `utils`
 Routines for processing workouts.
 
 **Global Variables**
 ---------------
-- **zwog_grammar**
+- **INTERVALST_LENGTH**
+- **SECONDS_IN_HOUR**
+- **SECONDS_IN_MINUTE**
+- **ZWOG_GRAMMAR**
+
+---
+
+<a href="../src/zwog/utils.py#L433"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `main`
+
+```python
+main() → NoReturn
+```
+
+ZWOG command line interface.
 
 
 ---
 
-<a href="../zwog/utils.py#L27"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../src/zwog/utils.py#L19"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>class</kbd> `Interval`
+Interval data.
+
+<a href="../<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `__init__`
+
+```python
+__init__(duration: int, power: Union[float, List[float]]) → None
+```
+
+
+
+
+
+
+
+
+
+---
+
+<a href="../src/zwog/utils.py#L27"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>class</kbd> `Block`
+Block data.
+
+<a href="../<string>"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `__init__`
+
+```python
+__init__(intervals: List[Interval], repeats: int = 1) → None
+```
+
+
+
+
+
+
+
+
+
+---
+
+<a href="../src/zwog/utils.py#L35"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `WorkoutTransformer`
 Class to process workout parse-trees.
@@ -22,109 +83,85 @@ Class to process workout parse-trees.
 
 ---
 
-<a href="../zwog/utils.py#L71"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../src/zwog/utils.py#L99"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `block`
 
 ```python
-block(b: list) → dict
+block(b: List[Tuple[str, Union[int, List[Interval]]]]) → Block
 ```
 
 Return block.
 
 ---
 
-<a href="../zwog/utils.py#L30"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
-
-### <kbd>method</kbd> `duration`
-
-```python
-duration(d: list) → int
-```
-
-Return duration in seconds.
-
----
-
-<a href="../zwog/utils.py#L44"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../src/zwog/utils.py#L46"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `durations`
 
 ```python
-durations(d: list) → int
+durations(d: List[Tuple[Union[int, float], str]]) → int
 ```
 
 Return total duration.
 
 ---
 
-<a href="../zwog/utils.py#L67"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../src/zwog/utils.py#L71"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `interval`
+
+```python
+interval(s: List[Tuple[int, Union[float, List[float]]]]) → Interval
+```
+
+Return steady-state.
+
+---
+
+<a href="../src/zwog/utils.py#L94"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `intervals`
 
 ```python
-intervals(i: list) → Tuple[str, list]
+intervals(i: List[Interval]) → Tuple[str, List[Interval]]
 ```
 
 Return intervals.
 
 ---
 
-<a href="../zwog/utils.py#L56"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../src/zwog/utils.py#L76"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `power`
 
 ```python
-power(p: List[float]) → Union[float, list]
+power(p: List[float]) → Union[float, List[float]]
 ```
 
 Return power.
 
 ---
 
-<a href="../zwog/utils.py#L52"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
-
-### <kbd>method</kbd> `ramp`
-
-```python
-ramp(s: list) → dict
-```
-
-Return ramp.
-
----
-
-<a href="../zwog/utils.py#L63"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../src/zwog/utils.py#L86"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `repeats`
 
 ```python
-repeats(r: list) → Tuple[str, int]
+repeats(r: List[int]) → Tuple[str, int]
 ```
 
 Return repeats.
 
----
-
-<a href="../zwog/utils.py#L48"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
-
-### <kbd>method</kbd> `steady_state`
-
-```python
-steady_state(s: list) → dict
-```
-
-Return steady-state.
-
 
 ---
 
-<a href="../zwog/utils.py#L81"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../src/zwog/utils.py#L107"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `ZWOG`
 Zwift workout generator (ZWOG).
 
-<a href="../zwog/utils.py#L84"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../src/zwog/utils.py#L110"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -135,7 +172,7 @@ __init__(
     name: str = 'Structured workout',
     category: Optional[str] = None,
     subcategory: Optional[str] = None
-)
+) → None
 ```
 
 Initialize ZWOG.
@@ -159,15 +196,15 @@ Get the workout as element.
 
 ---
 
-#### <kbd>property</kbd> json_workout
-
-Return workout as JSON.
-
----
-
 #### <kbd>property</kbd> tss
 
 Get TSS.
+
+---
+
+#### <kbd>property</kbd> workout
+
+Return workout.
 
 ---
 
@@ -179,12 +216,12 @@ Get the workout as ZWO.
 
 ---
 
-<a href="../zwog/utils.py#L118"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../src/zwog/utils.py#L142"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `save_zwo`
 
 ```python
-save_zwo(filename) → None
+save_zwo(filename: str) → None
 ```
 
 Save the workout in the ZWO format.
