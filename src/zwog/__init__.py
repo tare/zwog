@@ -1,5 +1,5 @@
 """zwog."""
-from .utils import ZWOG
+from zwog.utils import ZWOG
 
 __all__ = [
     "ZWOG",
