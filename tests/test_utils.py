@@ -1,11 +1,12 @@
 """unit tests for zwog.utils."""
+
 from itertools import starmap
 from tempfile import NamedTemporaryFile
-from typing import List, Tuple, Type, Union
-from xml.etree.ElementTree import Element, ElementTree, fromstring, parse
+from xml.etree.ElementTree import Element, ElementTree, fromstring, parse  # noqa: S405
 
 import pytest
 from lark.exceptions import UnexpectedCharacters, UnexpectedEOF
+
 from zwog.utils import ZWOG, Block, Interval, WorkoutTransformer
 
 
@@ -32,7 +33,7 @@ def elements_equal(e1: Element, e2: Element) -> bool:
         return False
     if len(e1) != len(e2):
         return False
-    return all(starmap(elements_equal, zip(e1, e2)))
+    return all(starmap(elements_equal, zip(e1, e2, strict=True)))
 
 
 @pytest.mark.parametrize(
@@ -52,7 +53,7 @@ def elements_equal(e1: Element, e2: Element) -> bool:
         (r"1f from 10 to 50% FTP", UnexpectedCharacters),
     ],
 )
-def test_zwog_grammar(test_input: str, exception: Type[Exception]) -> None:
+def test_zwog_grammar(test_input: str, exception: type[Exception]) -> None:
     """Test grammar."""
     with pytest.raises(exception):
         ZWOG(test_input)
@@ -66,9 +67,7 @@ def test_zwog_grammar(test_input: str, exception: Type[Exception]) -> None:
         ([(10, "s"), (0.5, "h")], 1810),
     ],
 )
-def test_durations(
-    test_input: List[Tuple[Union[int, float], str]], expected: int
-) -> None:
+def test_durations(test_input: list[tuple[int | float, str]], expected: int) -> None:
     """Test durations."""
     assert WorkoutTransformer().durations(test_input) == expected
 
@@ -87,8 +86,8 @@ def test_durations(
     ],
 )
 def test_durations_exceptions(
-    test_input: List[Tuple[Union[int, float], str]],
-    exception: Type[Exception],
+    test_input: list[tuple[int | float, str]],
+    exception: type[Exception],
     match: str,
 ) -> None:
     """Test durations exceptions."""
@@ -103,7 +102,7 @@ def test_durations_exceptions(
         ([10, 10], [10, 10]),
     ],
 )
-def test_power(test_input: List[float], expected: float) -> None:
+def test_power(test_input: list[float], expected: float) -> None:
     """Test power."""
     assert WorkoutTransformer().power(test_input) == expected
 
@@ -116,7 +115,7 @@ def test_power(test_input: List[float], expected: float) -> None:
     ],
 )
 def test_power_exceptions(
-    test_input: List[float], exception: Type[Exception], match: str
+    test_input: list[float], exception: type[Exception], match: str
 ) -> None:
     """Test power exceptions."""
     with pytest.raises(exception, match=match):
@@ -136,7 +135,7 @@ def test_power_exceptions(
     ],
 )
 def test_steady_state(
-    test_input: List[Tuple[int, Union[float, List[float]]]], expected: Interval
+    test_input: list[tuple[int, float | list[float]]], expected: Interval
 ) -> None:
     """Test steady_state."""
     assert WorkoutTransformer().interval(test_input) == expected
@@ -155,7 +154,7 @@ def test_steady_state(
     ],
 )
 def test_ramp(
-    test_input: List[Tuple[int, Union[float, List[float]]]], expected: Interval
+    test_input: list[tuple[int, float | list[float]]], expected: Interval
 ) -> None:
     """Test ramp."""
     assert WorkoutTransformer().interval(test_input) == expected
@@ -180,7 +179,7 @@ def test_ramp(
         ),
     ],
 )
-def test_repeats(test_input: List[int], expected: Tuple[str, int]) -> None:
+def test_repeats(test_input: list[int], expected: tuple[str, int]) -> None:
     """Test repeats."""
     assert WorkoutTransformer().repeats(test_input) == expected
 
@@ -215,7 +214,7 @@ def test_repeats(test_input: List[int], expected: Tuple[str, int]) -> None:
     ],
 )
 def test_intervals(
-    test_input: List[Interval], expected: Tuple[str, List[Interval]]
+    test_input: list[Interval], expected: tuple[str, list[Interval]]
 ) -> None:
     """Test intervals."""
     assert WorkoutTransformer().intervals(test_input) == expected
@@ -256,7 +255,7 @@ def test_intervals(
     ],
 )
 def test_block(
-    test_input: List[Tuple[str, Union[int, List[Interval]]]], expected: Block
+    test_input: list[tuple[str, int | list[Interval]]], expected: Block
 ) -> None:
     """Test block."""
     assert (WorkoutTransformer().block(test_input)) == expected
@@ -392,7 +391,7 @@ def test_tss(test_input: str, expected: float) -> None:
         ),
     ],
 )
-def test_workout(test_input: str, expected: List[Block]) -> None:
+def test_workout(test_input: str, expected: list[Block]) -> None:
     """Test workout (ZWOG)."""
     assert ZWOG(test_input).workout == expected
 
@@ -459,11 +458,11 @@ def test_workout(test_input: str, expected: List[Block]) -> None:
         ),
     ],
 )
-def test_element_workout(test_input: List[str], expected: str) -> None:
+def test_element_workout(test_input: list[str], expected: str) -> None:
     """Test element_workout (ZWOG)."""
     assert elements_equal(
         ZWOG(*test_input).element_workout,
-        ElementTree(fromstring(expected)).getroot(),
+        ElementTree(fromstring(expected)).getroot(),  # noqa: S314
     )
 
 
@@ -476,7 +475,7 @@ def test_save_zwo(test_input: str) -> None:
     workout = ZWOG(test_input)
     with NamedTemporaryFile(suffix=".xml") as tmp_file:
         workout.save_zwo(tmp_file.name)
-        read_workout = parse(tmp_file.name)
+        read_workout = parse(tmp_file.name)  # noqa: S314
     assert elements_equal(
         read_workout.getroot(),
         workout.element_workout,
@@ -530,6 +529,6 @@ def test_save_zwo(test_input: str) -> None:
         ),
     ],
 )
-def test_zwo_workout(test_input: List[str], expected: str) -> None:
+def test_zwo_workout(test_input: list[str], expected: str) -> None:
     """Test zwo_workout (ZWOG)."""
     assert ZWOG(*test_input).zwo_workout == expected
