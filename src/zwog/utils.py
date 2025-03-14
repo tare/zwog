@@ -1,10 +1,16 @@
 """Routines for processing workouts."""
+
 import argparse
 import sys
 from dataclasses import dataclass
 from importlib.metadata import version
-from typing import Any, List, NoReturn, Optional, Tuple, Union
-from xml.etree.ElementTree import Element, ElementTree, SubElement, tostring
+from typing import Any, NoReturn
+from xml.etree.ElementTree import (  # noqa: S405
+    Element,
+    ElementTree,
+    SubElement,
+    tostring,
+)
 
 from lark import Lark, Transformer
 
@@ -21,14 +27,14 @@ class Interval:
     """Interval data."""
 
     duration: int
-    power: Union[float, List[float]]
+    power: float | list[float]
 
 
 @dataclass
 class Block:
     """Block data."""
 
-    intervals: List[Interval]
+    intervals: list[Interval]
     repeats: int = 1
 
 
@@ -44,10 +50,16 @@ class WorkoutTransformer(Transformer[Any, Any]):
     workout = list
 
     @staticmethod
-    def durations(d: List[Tuple[Union[int, float], str]]) -> int:
-        """Return total duration."""
+    def durations(d: list[tuple[int | float, str]]) -> int:
+        """Return total duration.
 
-        def duration(x: Union[int, float], y: str) -> int:
+        Raises:
+            ValueError: Duration values are not strictly positive.
+            ValueError: Unexpected unit of time.
+            ValueError: Interval duration values are not strictly positive.
+        """
+
+        def duration(x: float, y: str) -> int:
             if x <= 0:
                 msg = "Duration values need to be strictly positive"
                 raise ValueError(msg)
@@ -69,13 +81,17 @@ class WorkoutTransformer(Transformer[Any, Any]):
         return total_duration
 
     @staticmethod
-    def interval(s: List[Tuple[int, Union[float, List[float]]]]) -> Interval:
+    def interval(s: list[tuple[int, float | list[float]]]) -> Interval:
         """Return steady-state."""
         return Interval(duration=s[0][0], power=s[0][1])
 
     @staticmethod
-    def power(p: List[float]) -> Union[float, List[float]]:
-        """Return power."""
+    def power(p: list[float]) -> float | list[float]:
+        """Return power.
+
+        Raises:
+            ValueError: If power values are negative.
+        """
         if any(x < 0 for x in p):
             msg = "Power values need to be positive"
             raise ValueError(msg)
@@ -84,21 +100,25 @@ class WorkoutTransformer(Transformer[Any, Any]):
         return p
 
     @staticmethod
-    def repeats(r: List[int]) -> Tuple[str, int]:
-        """Return repeats."""
+    def repeats(r: list[int]) -> tuple[str, int]:
+        """Return repeats.
+
+        Raises:
+            ValueError: If repeat multipliers are negative.
+        """
         if r[0] <= 0:
             msg = "Repeat multipliers need to be strictly positive"
             raise ValueError(msg)
         return "repeats", r[0]
 
     @staticmethod
-    def intervals(i: List[Interval]) -> Tuple[str, List[Interval]]:
+    def intervals(i: list[Interval]) -> tuple[str, list[Interval]]:
         """Return intervals."""
         return "intervals", i
 
     @staticmethod
     def block(
-        b: List[Tuple[str, Union[int, List[Interval]]]],
+        b: list[tuple[str, int | list[Interval]]],
     ) -> Block:
         """Return block."""
         return Block(**dict(x for x in b if x))  # type: ignore[arg-type]
@@ -112,8 +132,8 @@ class ZWOG:
         workout: str,
         author: str = ("Zwift workout generator (https://github.com/tare/zwog)"),
         name: str = "Structured workout",
-        category: Optional[str] = None,
-        subcategory: Optional[str] = None,
+        category: str | None = None,
+        subcategory: str | None = None,
     ) -> None:
         """Initialize ZWOG.
 
@@ -132,7 +152,7 @@ class ZWOG:
         self._category = category
         self._subcategory = subcategory
 
-        self._workout: List[Block] = WorkoutTransformer().transform(
+        self._workout: list[Block] = WorkoutTransformer().transform(
             parser.parse(workout)
         )
         self._pretty_workout = self._to_pretty(self._workout)
@@ -158,7 +178,7 @@ class ZWOG:
         return self._tss
 
     @property
-    def workout(self) -> List[Block]:
+    def workout(self) -> list[Block]:
         """Return workout."""
         return self._workout
 
@@ -219,7 +239,7 @@ class ZWOG:
 
     @staticmethod
     def _interval_to_xml(
-        interval: Union[Interval, List[Interval]], repeats: int = 1
+        interval: Interval | list[Interval], repeats: int = 1
     ) -> Element:
         """Return the interval as a XML node.
 
@@ -229,6 +249,9 @@ class ZWOG:
 
         Returns:
             XML node representing the interval.
+
+        Raises:
+            TypeError: Unexpected interval type.
 
         """
         if isinstance(interval, Interval):
@@ -257,7 +280,7 @@ class ZWOG:
             raise TypeError(msg)
         return element
 
-    def _to_zwo(self, blocks: List[Block]) -> ElementTree:
+    def _to_zwo(self, blocks: list[Block]) -> ElementTree:
         """Convert to ZWO.
 
         See: https://github.com/h4l/zwift-workout-file-reference/blob/master/zwift_workout_file_tag_reference.md
@@ -391,7 +414,7 @@ class ZWOG:
             + interval.duration / 3600 * (max_power - min_power) / 2
         )
 
-    def _to_pretty(self, blocks: List[Block]) -> str:
+    def _to_pretty(self, blocks: list[Block]) -> str:
         """Return the workout as a string.
 
         Args:
@@ -409,7 +432,7 @@ class ZWOG:
             for block in blocks
         )
 
-    def _to_tss(self, blocks: List[Block]) -> float:
+    def _to_tss(self, blocks: list[Block]) -> float:
         """Calculate TSS for a workout.
 
         Args:

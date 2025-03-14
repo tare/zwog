@@ -6,4 +6,4 @@
 
 ## Testing
 
-## Anything else
+## Additional information
